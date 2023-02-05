@@ -9,10 +9,12 @@ final appTheme = ThemeData(
     primary: primaryColor,
   ),
   brightness: Brightness.light,
-  scaffoldBackgroundColor: Colors.white,
+  scaffoldBackgroundColor:  const Color(0xfff9f9f9),
   inputDecorationTheme: _buildInputDecoration(),
   elevatedButtonTheme: _buildElevatedButtonTheme(),
-  textTheme: GoogleFonts.robotoTextTheme(),
+  textTheme: GoogleFonts.blinkerTextTheme().copyWith(
+
+  ),
 );
 
 ElevatedButtonThemeData _buildElevatedButtonTheme() {

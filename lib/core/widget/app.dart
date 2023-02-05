@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:netgeek/core/injection/injection.dart';
 import 'package:netgeek/core/theme/app_theme.dart';
+import 'package:netgeek/features/dashboard/ui/pages/dashboard_page.dart';
 import 'package:netgeek/features/login/bloc/auth_bloc.dart';
 import 'package:netgeek/features/login/bloc/login_bloc.dart';
 
@@ -50,7 +51,7 @@ class _AppRouter extends StatelessWidget {
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (_, state) {
         if (state is AuthenticatedState) {
-          return const Center(child: Text('Hello'));
+          return const DashboardPage();
         } else if (state is UnauthenticatedState) {
           return BlocProvider(
             create: (_) => getIt<LoginBloc>(),
