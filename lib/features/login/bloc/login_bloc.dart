@@ -23,8 +23,6 @@ class LoginState with _$LoginState {
 
   const factory LoginState.success() = LoginSuccessState;
 
-  const factory LoginState.twoFactor() = LoginTwoFactorState;
-
   const factory LoginState.error({required Exception exception}) =
       LoginErrorState;
 }

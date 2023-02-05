@@ -7,6 +7,7 @@ import 'package:netgeek/features/login/bloc/auth_bloc.dart';
 import 'package:netgeek/features/login/bloc/login_bloc.dart';
 
 import 'package:netgeek/features/login/ui/pages/login_page.dart';
+import 'package:netgeek/features/registration/ui/pages/registration_page.dart';
 
 class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);
@@ -50,6 +51,10 @@ class _AppRouter extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (_, state) {
+        return BlocProvider(
+          create: (_) => getIt<LoginBloc>(),
+          child: const RegistrationPage(),
+        );
         if (state is AuthenticatedState) {
           return const DashboardPage();
         } else if (state is UnauthenticatedState) {

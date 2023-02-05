@@ -5,17 +5,23 @@ import 'package:netgeek/core/constants/constants.dart';
 
 final appTheme = ThemeData(
   primaryColor: primaryColor,
+  appBarTheme: _buildAppBarTheme(),
   colorScheme: ColorScheme.fromSwatch().copyWith(
     primary: primaryColor,
   ),
   brightness: Brightness.light,
-  scaffoldBackgroundColor:  const Color(0xfff9f9f9),
+  scaffoldBackgroundColor: const Color(0xfff9f9f9),
   inputDecorationTheme: _buildInputDecoration(),
   elevatedButtonTheme: _buildElevatedButtonTheme(),
-  textTheme: GoogleFonts.blinkerTextTheme().copyWith(
-
-  ),
+  textTheme: GoogleFonts.blinkerTextTheme().copyWith(),
 );
+
+AppBarTheme _buildAppBarTheme() {
+  return const AppBarTheme(
+    color: Colors.white,
+    elevation: 0,
+  );
+}
 
 ElevatedButtonThemeData _buildElevatedButtonTheme() {
   return ElevatedButtonThemeData(

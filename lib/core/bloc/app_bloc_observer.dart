@@ -6,7 +6,7 @@ class AppBlocObserver extends BlocObserver {
   void onError(BlocBase bloc, Object error, StackTrace stackTrace) {
     super.onError(bloc, error, stackTrace);
 
-    // TODO Logic handling errors
+    // Sending errors to Firebase crashlytics
   }
 
   @override

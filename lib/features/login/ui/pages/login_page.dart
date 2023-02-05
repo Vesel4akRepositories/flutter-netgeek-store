@@ -46,7 +46,7 @@ class _LoginPageState extends State<LoginPage> {
                 Expanded(
                   flex: 1,
                   child: Text(
-                    'Вход',
+                    'Login',
                     style: themeData.textTheme.headlineMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
@@ -61,7 +61,7 @@ class _LoginPageState extends State<LoginPage> {
                         controller: _loginController,
                         validator: DefaultValidator().validate,
                         decoration: const InputDecoration(
-                          labelText: 'Логин',
+                          labelText: 'Login',
                         ),
                       ),
                       const Gap(kPadding),
@@ -71,14 +71,33 @@ class _LoginPageState extends State<LoginPage> {
                         obscureText: true,
                         validator: PasswordValidator().validate,
                         decoration: const InputDecoration(
-                          labelText: 'Пароль',
+                          labelText: 'Password',
                         ),
                       ),
                       const Gap(kPadding * 2),
                       ElevatedButton(
                         onPressed: _onLogin,
-                        child: const Text('Войти'),
+                        child: const Text('Log in'),
                       ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const Text(
+                        'Not registered yet?',
+                        textAlign: TextAlign.center,
+                      ),
+                      Text(
+                        'Sign up',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: themeData.primaryColor,
+                        ),
+                      )
                     ],
                   ),
                 ),
