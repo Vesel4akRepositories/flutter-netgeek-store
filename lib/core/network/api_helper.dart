@@ -3,13 +3,41 @@ import 'dart:io';
 
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
+import 'package:injectable/injectable.dart';
+import 'package:netgeek/core/constants/env_constants.dart' as env;
+import 'package:netgeek/features/login/data/token_repository.dart';
+import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
+@lazySingleton
 class HttpManager {
-  final Dio _dio = Dio();
+  final Dio _dio = Dio()
+    ..options.baseUrl =
+        env.EnvironmentConstants.setEnvironment(env.Environment.dev)
+    ..options.connectTimeout = 20000
+    ..options.sendTimeout = 20000
+    ..options.receiveTimeout = 20000
+    ..options.headers = {
+      "Content-Type": 'application/json',
+    };
 
-  HttpManager([String baseUrl = '', Map<String, dynamic>? headers]) {
-    _dio.options.baseUrl = baseUrl;
-    _dio.options.headers = headers;
+  final TokenRepository _tokenRepository;
+
+  HttpManager(this._tokenRepository) {
+    _dio.interceptors.add(
+      PrettyDioLogger(
+        compact: true,
+        requestBody: true,
+        requestHeader: true,
+        responseHeader: true,
+      ),
+    );
+
+    _dio.interceptors.add(
+      InterceptorsWrapper(
+        //onError: _onError,
+        onRequest: _onRequest,
+      ),
+    );
 
     (_dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
         (HttpClient client) {
@@ -17,6 +45,20 @@ class HttpManager {
           (X509Certificate cert, String host, int port) => true;
       return client;
     };
+  }
+
+  void _onRequest(
+      RequestOptions options, RequestInterceptorHandler handler) async {
+    final accessToken = await _tokenRepository.readAccessToken();
+
+    if (accessToken != null) {
+      options.headers.clear();
+      options.headers.addAll({
+        "Content-Type": 'application/json',
+        "Authorization": 'Bearer $accessToken',
+      });
+    }
+    return handler.next(options);
   }
 
   Future<Response> get(

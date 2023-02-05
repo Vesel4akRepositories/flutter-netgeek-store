@@ -5,13 +5,16 @@
 // **************************************************************************
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
+import 'package:flutter_secure_storage/flutter_secure_storage.dart' as _i3;
 import 'package:get_it/get_it.dart' as _i1;
 import 'package:injectable/injectable.dart' as _i2;
-import 'package:netgeek/core/injection/register_module.dart' as _i6;
-import 'package:netgeek/core/network/api_helper.dart' as _i3;
-import 'package:netgeek/features/login/bloc/login_bloc.dart' as _i4;
-import 'package:netgeek/features/login/data/login_repository.dart'
-    as _i5; // ignore_for_file: unnecessary_lambdas
+import 'package:netgeek/core/injection/register_module.dart' as _i9;
+import 'package:netgeek/core/network/api_helper.dart' as _i6;
+import 'package:netgeek/features/login/bloc/auth_bloc.dart' as _i5;
+import 'package:netgeek/features/login/bloc/login_bloc.dart' as _i8;
+import 'package:netgeek/features/login/data/login_repository.dart' as _i7;
+import 'package:netgeek/features/login/data/token_repository.dart'
+    as _i4; // ignore_for_file: unnecessary_lambdas
 
 // ignore_for_file: lines_longer_than_80_chars
 /// initializes the registration of provided dependencies inside of [GetIt]
@@ -26,11 +29,20 @@ _i1.GetIt $initGetIt(
     environmentFilter,
   );
   final registerModule = _$RegisterModule();
-  gh.factory<_i3.HttpManager>(() => registerModule.httpManager);
-  gh.factory<_i4.LoginBloc>(() => _i4.LoginBloc(get<dynamic>()));
-  gh.factory<_i5.LoginRepository>(
-      () => _i5.LoginRepository(get<_i3.HttpManager>()));
+  gh.singleton<_i3.FlutterSecureStorage>(registerModule.secureStorage);
+  gh.lazySingleton<_i4.TokenRepository>(
+      () => _i4.TokenRepository(get<_i3.FlutterSecureStorage>()));
+  gh.lazySingleton<_i5.AuthBloc>(
+      () => _i5.AuthBloc(get<_i4.TokenRepository>()));
+  gh.lazySingleton<_i6.HttpManager>(
+      () => _i6.HttpManager(get<_i4.TokenRepository>()));
+  gh.factory<_i7.LoginRepository>(
+      () => _i7.LoginRepository(get<_i6.HttpManager>()));
+  gh.factory<_i8.LoginBloc>(() => _i8.LoginBloc(
+        get<_i5.AuthBloc>(),
+        get<_i7.LoginRepository>(),
+      ));
   return get;
 }
 
-class _$RegisterModule extends _i6.RegisterModule {}
+class _$RegisterModule extends _i9.RegisterModule {}

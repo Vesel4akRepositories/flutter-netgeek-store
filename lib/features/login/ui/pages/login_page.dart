@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:netgeek/core/constants/constants.dart';
 import 'package:netgeek/core/util/validators/validators.dart';
 import 'package:netgeek/core/widget/gap/gap.dart';
+import 'package:netgeek/features/login/bloc/login_bloc.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -11,14 +13,19 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final _emailController = TextEditingController();
+  final _loginController = TextEditingController();
   final _passwordController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
 
   void _onLogin() {
     if (_formKey.currentState!.validate()) {
-
+      context.read<LoginBloc>().add(
+            LoginEvent.loggedIn(
+              email: _loginController.text.trim(),
+              password: _passwordController.text,
+            ),
+          );
     }
   }
 
@@ -51,17 +58,18 @@ class _LoginPageState extends State<LoginPage> {
                   child: Column(
                     children: [
                       TextFormField(
-                        controller: _emailController,
-                        keyboardType: TextInputType.emailAddress,
-                        validator: EmailValidator().validate,
+                        controller: _loginController,
+                        validator: DefaultValidator().validate,
                         decoration: const InputDecoration(
-                          labelText: 'Почта',
+                          labelText: 'Логин',
                         ),
                       ),
                       const Gap(kPadding),
                       TextFormField(
                         controller: _passwordController,
-                        keyboardType: TextInputType.emailAddress,
+                        keyboardType: TextInputType.visiblePassword,
+                        obscureText: true,
+                        validator: PasswordValidator().validate,
                         decoration: const InputDecoration(
                           labelText: 'Пароль',
                         ),
@@ -84,7 +92,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void dispose() {
-    _emailController.dispose();
+    _loginController.dispose();
     _passwordController.dispose();
 
     super.dispose();

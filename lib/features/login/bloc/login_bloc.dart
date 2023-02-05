@@ -1,9 +1,8 @@
-import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
-import 'package:netgeek/core/util/exceptions/exceptions.dart';
 import 'package:netgeek/core/util/handlers/exception_handler.dart';
+import 'package:netgeek/features/login/bloc/auth_bloc.dart';
 import 'package:netgeek/features/login/data/login_repository.dart';
 
 part 'login_bloc.freezed.dart';
@@ -33,11 +32,10 @@ class LoginState with _$LoginState {
 @injectable
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final LoginRepository _loginRepository;
-
-  //final AuthBloc _authBloc;
+  final AuthBloc _authBloc;
 
   LoginBloc(
-    // this._authBloc,
+    this._authBloc,
     this._loginRepository,
   ) : super(const LoginState.idle()) {
     on<LoginEvent>(
@@ -55,6 +53,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       final loginResponse = await _loginRepository.login(
         email: event.email,
         password: event.password,
+      );
+
+      _authBloc.add(
+        AuthEvent.loggedIn(
+          accessToken: loginResponse.access,
+          refreshToken: loginResponse.refresh,
+        ),
       );
 
       emitter(const LoginState.success());

@@ -24,9 +24,9 @@ class LoginRepository {
     String? twoStepCode,
   }) async {
     final response = await _httpManager.post(
-      'authMerchant',
+      'token/',
       data: {
-        'email': email,
+        'username': email,
         'password': password,
       },
     );
