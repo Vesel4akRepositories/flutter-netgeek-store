@@ -16,13 +16,20 @@ class RegistrationEvent with _$RegistrationEvent {
 
 @freezed
 class RegistrationState with _$RegistrationState {
-  const factory RegistrationState.idle() = RegistrationInitialState;
+  RegistrationState._();
 
-  const factory RegistrationState.loading() = RegistrationLoadingState;
+  bool get isLoading => maybeMap(
+        loading: (_) => true,
+        orElse: () => false,
+      );
 
-  const factory RegistrationState.success() = RegistrationSuccessState;
+  factory RegistrationState.idle() = RegistrationInitialState;
 
-  const factory RegistrationState.error({required Exception exception}) =
+  factory RegistrationState.loading() = RegistrationLoadingState;
+
+  factory RegistrationState.success() = RegistrationSuccessState;
+
+  factory RegistrationState.error({required Exception exception}) =
       RegistrationErrorState;
 }
 
@@ -32,7 +39,7 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
 
   RegistrationBloc(
     this._repository,
-  ) : super(const RegistrationState.idle()) {
+  ) : super(RegistrationState.idle()) {
     on<RegistrationEvent>(
       (event, emitter) => event.map<Future<void>>(
         register: (event) => _registerUser(event, emitter),
@@ -43,11 +50,11 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
   Future<void> _registerUser(
       _RegisterEvent event, Emitter<RegistrationState> emitter) async {
     try {
-      emitter(const RegistrationState.loading());
+      emitter(RegistrationState.loading());
 
       await _repository.registerUser(event.request);
 
-      emitter(const RegistrationState.success());
+      emitter(RegistrationState.success());
     } catch (error) {
       emitter(
         RegistrationState.error(

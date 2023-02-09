@@ -8,16 +8,6 @@ class LoginRepository {
 
   LoginRepository(this._httpManager);
 
-  Future<String> registerUser({
-    required String email,
-    required String password,
-    required String passwordConfirm,
-    String? inviteCode,
-    required String gRecaptchaResponse,
-  }) async {
-    throw UnimplementedError();
-  }
-
   Future<LoginResponse> login({
     required String email,
     required String password,

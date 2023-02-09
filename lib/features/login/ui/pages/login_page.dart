@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:netgeek/core/constants/constants.dart';
+import 'package:netgeek/core/injection/injection.dart';
 import 'package:netgeek/core/util/validators/validators.dart';
 import 'package:netgeek/core/widget/gap/gap.dart';
 import 'package:netgeek/features/login/bloc/login_bloc.dart';
+import 'package:netgeek/features/registration/bloc/registration_bloc.dart';
+import 'package:netgeek/features/registration/ui/pages/registration_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -27,6 +30,18 @@ class _LoginPageState extends State<LoginPage> {
             ),
           );
     }
+  }
+
+  void _openRegistration() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => BlocProvider(
+          create: (_) => getIt<RegistrationBloc>(),
+          child: const RegistrationPage(),
+        ),
+      ),
+    );
   }
 
   @override
@@ -91,11 +106,14 @@ class _LoginPageState extends State<LoginPage> {
                         'Not registered yet?',
                         textAlign: TextAlign.center,
                       ),
-                      Text(
-                        'Sign up',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: themeData.primaryColor,
+                      GestureDetector(
+                        onTap: _openRegistration,
+                        child: Text(
+                          'Sign up',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: themeData.primaryColor,
+                          ),
                         ),
                       )
                     ],

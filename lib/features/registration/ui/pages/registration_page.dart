@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:netgeek/core/constants/constants.dart';
 import 'package:netgeek/core/util/validators/validators.dart';
+import 'package:netgeek/core/widget/dialogs/dialogs_manager.dart';
 import 'package:netgeek/core/widget/gap/gap.dart';
 import 'package:netgeek/features/registration/bloc/registration_bloc.dart';
 import 'package:netgeek/features/registration/models/registration_request.dart';
@@ -40,6 +41,11 @@ class _RegistrationPageState extends State<RegistrationPage> {
     }
   }
 
+  void _showError(Exception exception) =>
+      DialogsManager.of(context).showError(exception: exception);
+
+  void _onSuccess() => Navigator.pop(context);
+
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
@@ -48,85 +54,97 @@ class _RegistrationPageState extends State<RegistrationPage> {
       backgroundColor: Colors.white,
       appBar: AppBar(),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Form(
-            key: _formKey,
-            child: ListView(
-              physics: const ClampingScrollPhysics(),
-              children: [
-                const Gap(kPadding),
-                Text(
-                  'Sign up',
-                  style: themeData.textTheme.headlineMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const Gap(kPadding * 2),
-                Column(
+        child: BlocConsumer<RegistrationBloc, RegistrationState>(
+          listener: (context, state) {
+            state.maybeMap(
+              success: (_) => _onSuccess(),
+              error: (state) => _showError(state.exception),
+              orElse: () {},
+            );
+          },
+          builder: (context, state) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Form(
+                key: _formKey,
+                child: ListView(
+                  physics: const ClampingScrollPhysics(),
                   children: [
-                    TextFormField(
-                      controller: _loginController,
-                      validator: DefaultValidator().validate,
-                      decoration: const InputDecoration(
-                        labelText: 'Login',
-                      ),
-                    ),
                     const Gap(kPadding),
-                    TextFormField(
-                      controller: _passwordController,
-                      keyboardType: TextInputType.visiblePassword,
-                      obscureText: true,
-                      validator: PasswordValidator().validate,
-                      decoration: const InputDecoration(
-                        labelText: 'Password',
-                      ),
-                    ),
-                    const Gap(kPadding),
-                    TextFormField(
-                      controller: _confirmPasswordController,
-                      keyboardType: TextInputType.visiblePassword,
-                      obscureText: true,
-                      validator: PasswordValidator().validate,
-                      decoration: const InputDecoration(
-                        labelText: 'Repeat password',
+                    Text(
+                      'Sign up',
+                      style: themeData.textTheme.headlineMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.red
                       ),
                     ),
                     const Gap(kPadding * 2),
-                    TextFormField(
-                      controller: _emailController,
-                      keyboardType: TextInputType.emailAddress,
-                      autofillHints: const [AutofillHints.email],
-                      validator: EmailValidator().validate,
-                      decoration: const InputDecoration(
-                        labelText: 'Email',
-                      ),
-                    ),
-                    const Gap(kPadding),
-                    TextFormField(
-                      controller: _firstNameController,
-                      autofillHints: const [AutofillHints.name],
-                      decoration: const InputDecoration(
-                        labelText: 'First Name',
-                      ),
-                    ),
-                    const Gap(kPadding),
-                    TextFormField(
-                      controller: _lastNameController,
-                      decoration: const InputDecoration(
-                        labelText: 'Last Name',
-                      ),
-                    ),
-                    const Gap(kPadding * 2),
-                    ElevatedButton(
-                      onPressed: _onRegister,
-                      child: const Text('Sign up'),
+                    Column(
+                      children: [
+                        TextFormField(
+                          controller: _loginController,
+                          validator: DefaultValidator().validate,
+                          decoration: const InputDecoration(
+                            labelText: 'Login',
+                          ),
+                        ),
+                        const Gap(kPadding),
+                        TextFormField(
+                          controller: _passwordController,
+                          keyboardType: TextInputType.visiblePassword,
+                          obscureText: true,
+                          validator: PasswordValidator().validate,
+                          decoration: const InputDecoration(
+                            labelText: 'Password',
+                          ),
+                        ),
+                        const Gap(kPadding),
+                        TextFormField(
+                          controller: _confirmPasswordController,
+                          keyboardType: TextInputType.visiblePassword,
+                          obscureText: true,
+                          validator: PasswordValidator().validate,
+                          decoration: const InputDecoration(
+                            labelText: 'Repeat password',
+                          ),
+                        ),
+                        const Gap(kPadding * 2),
+                        TextFormField(
+                          controller: _emailController,
+                          keyboardType: TextInputType.emailAddress,
+                          autofillHints: const [AutofillHints.email],
+                          validator: EmailValidator().validate,
+                          decoration: const InputDecoration(
+                            labelText: 'Email',
+                          ),
+                        ),
+                        const Gap(kPadding),
+                        TextFormField(
+                          controller: _firstNameController,
+                          autofillHints: const [AutofillHints.name],
+                          decoration: const InputDecoration(
+                            labelText: 'First Name',
+                          ),
+                        ),
+                        const Gap(kPadding),
+                        TextFormField(
+                          controller: _lastNameController,
+                          decoration: const InputDecoration(
+                            labelText: 'Last Name',
+                          ),
+                        ),
+                        const Gap(kPadding * 2),
+                        ElevatedButton(
+                          onPressed: state.isLoading ? null : _onRegister,
+                          child: const Text('Sign up'),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
-            ),
-          ),
+              ),
+            );
+          },
         ),
       ),
     );

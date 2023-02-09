@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:netgeek/core/injection/injection.dart';
 import 'package:netgeek/core/theme/app_theme.dart';
+import 'package:netgeek/core/widget/dialogs/dialogs_manager.dart';
 import 'package:netgeek/features/dashboard/ui/pages/dashboard_page.dart';
 import 'package:netgeek/features/login/bloc/auth_bloc.dart';
 import 'package:netgeek/features/login/bloc/login_bloc.dart';
 
 import 'package:netgeek/features/login/ui/pages/login_page.dart';
+import 'package:netgeek/features/registration/bloc/registration_bloc.dart';
 import 'package:netgeek/features/registration/ui/pages/registration_page.dart';
 
 class App extends StatelessWidget {
@@ -25,16 +27,14 @@ class App extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         home: GestureDetector(
           onTap: () => _unFocus(context),
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider(
-                create: (_) => getIt<AuthBloc>()
-                  ..add(
-                    const AuthEvent.started(),
-                  ),
+          child: BlocProvider(
+            create: (_) => getIt<AuthBloc>()
+              ..add(
+                const AuthEvent.started(),
               ),
-            ],
-            child: const _AppRouter(),
+            child: const DialogsManager(
+              child: _AppRouter(),
+            ),
           ),
         ),
         builder: (context, child) => MediaQuery(
@@ -51,10 +51,6 @@ class _AppRouter extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (_, state) {
-        return BlocProvider(
-          create: (_) => getIt<LoginBloc>(),
-          child: const RegistrationPage(),
-        );
         if (state is AuthenticatedState) {
           return const DashboardPage();
         } else if (state is UnauthenticatedState) {

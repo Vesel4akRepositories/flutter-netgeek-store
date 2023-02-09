@@ -20,6 +20,7 @@ AppBarTheme _buildAppBarTheme() {
   return const AppBarTheme(
     color: Colors.white,
     elevation: 0,
+    foregroundColor: Colors.black,
   );
 }
 
