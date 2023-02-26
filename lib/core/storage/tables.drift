@@ -1,0 +1,10 @@
+CREATE TABLE cart (
+    id SERIAL PRIMARY KEY,
+    item_name VARCHAR(255) NOT NULL,
+    item_id INTEGER NOT NULL,
+    item_picture VARCHAR(255) NOT NULL,
+    item_price DECIMAL(10,2) NOT NULL,
+    item_quantity INTEGER NOT NULL
+);
+
+cartItems: SELECT * FROM cart;

@@ -21,7 +21,6 @@ class ProductsPage extends StatelessWidget {
       ),
       body: Column(
         children: [
-
           BlocConsumer<ProductsBloc, ProductsState>(
             listener: (_, state) {},
             builder: (_, state) {
@@ -37,8 +36,7 @@ class ProductsPage extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: kPadding),
                 child: GridView.builder(
                   shrinkWrap: true,
-                  gridDelegate:
-                  const SliverGridDelegateWithFixedCrossAxisCount(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     mainAxisSpacing: 10,
                     childAspectRatio: 0.5,

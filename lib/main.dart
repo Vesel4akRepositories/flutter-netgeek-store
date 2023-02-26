@@ -23,6 +23,4 @@ abstract class Category {
   void displayCategory();
 }
 
-abstract class Payment{
-
-}
+abstract class Payment {}

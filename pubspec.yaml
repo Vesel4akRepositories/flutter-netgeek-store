@@ -23,6 +23,11 @@ dependencies:
   flutter_secure_storage: ^7.0.1
   pretty_dio_logger: ^1.1.1
   share_plus: ^6.3.1
+  drift: ^2.5.0
+  sqlite3_flutter_libs: ^0.5.0
+  path_provider: ^2.0.0
+  path: ^1.8.2
+  shared_preferences: ^2.0.17
 
 
 dev_dependencies:
@@ -33,6 +38,7 @@ dev_dependencies:
   json_serializable: ^6.3.1
   freezed: ^2.3.2
   flutter_lints: ^2.0.0
+  drift_dev: ^2.5.2
 
 flutter:
 

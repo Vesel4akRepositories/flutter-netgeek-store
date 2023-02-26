@@ -18,7 +18,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
 
   void _onShare() {
     Share.share(
-        'Хочу поделиться с тобой одним интересным продуктом, его можно приобрести в магазине netgeek: ');
+        'Хочу поделиться с тобой одним интересным продуктом, его можно приобрести в магазине netgeek: ${product.toString()}');
   }
 
   @override
@@ -83,7 +83,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                   )
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),
