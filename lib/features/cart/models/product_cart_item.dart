@@ -7,8 +7,9 @@ part 'product_cart_item.g.dart';
 class ProductCartItem with _$ProductCartItem {
   const factory ProductCartItem({
     required int id,
-    required int name,
-    required String price,
+    required String name,
+    required String picture,
+    required double price,
     required int quantity,
   }) = _ProductCartItem;
 

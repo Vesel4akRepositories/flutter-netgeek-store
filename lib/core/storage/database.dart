@@ -3,15 +3,15 @@ import 'dart:io';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:injectable/injectable.dart';
+import 'package:netgeek/core/storage/tables.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 
 part 'database.g.dart';
 
+
 @DriftDatabase(
-  // relative import for the drift file. Drift also supports `package:`
-  // imports
-  include: {'tables.drift'},
+  tables: [CartEntries]
 )
 @singleton
 class AppDb extends _$AppDb {

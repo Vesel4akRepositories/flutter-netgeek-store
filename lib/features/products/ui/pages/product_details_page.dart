@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:netgeek/core/constants/constants.dart';
 import 'package:netgeek/core/widget/gap/gap.dart';
+import 'package:netgeek/features/cart/ui/bloc/cart_bloc.dart';
 import 'package:netgeek/features/products/models/product.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -13,25 +15,26 @@ class ProductDetailsPage extends StatefulWidget {
   State<ProductDetailsPage> createState() => _ProductDetailsPageState();
 }
 
-class _ProductDetailsPageState extends State<ProductDetailsPage> {
+class _ProductDetailsPageState extends State<ProductDetailsPage>
+    with ProductDetailsMixin {
   Product get product => widget.product;
 
-  void _onShare() {
-    Share.share(
-        'Хочу поделиться с тобой одним интересным продуктом, его можно приобрести в магазине netgeek: ${product.toString()}');
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-
+    context.read<CartBloc>();
     return Scaffold(
       appBar: AppBar(
         title: Text(product.name),
         actions: [
           IconButton(
             icon: const Icon(Icons.share),
-            onPressed: _onShare,
+            onPressed: () => _onShare(product),
           )
         ],
       ),
@@ -87,6 +90,24 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
           ],
         ),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: kPadding),
+        child: ElevatedButton(
+          onPressed: () => _addToCart(context, product: product),
+          child: const Text('Add to cart'),
+        ),
+      ),
     );
   }
+}
+
+mixin ProductDetailsMixin {
+  void _onShare(Product product) {
+    Share.share(
+        'Хочу поделиться с тобой одним интересным продуктом, его можно приобрести в магазине netgeek: ${product.toString()}');
+  }
+
+  void _addToCart(BuildContext context, {required Product product}) =>
+      context.read<CartBloc>().add(CartEvent.addItem(product: product));
 }

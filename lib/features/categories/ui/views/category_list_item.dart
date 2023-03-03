@@ -20,7 +20,7 @@ class CategoryListItem extends StatelessWidget {
       context,
       MaterialPageRoute(
         builder: (_) => BlocProvider(
-          create: (context) => getIt<ProductsBloc>()
+          create: (_) => getIt<ProductsBloc>()
             ..add(
               ProductsEvent.fetch(categoryId: category.id),
             ),

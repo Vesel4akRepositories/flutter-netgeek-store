@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:netgeek/core/constants/constants.dart';
-import 'package:netgeek/core/widget/gap/gap.dart';
 import 'package:netgeek/features/categories/bloc/categories_bloc.dart';
 import 'package:netgeek/features/categories/ui/views/category_list_item.dart';
 

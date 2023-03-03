@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:netgeek/core/injection/injection.dart';
-import 'package:netgeek/core/widget/app.dart';
+import 'package:netgeek/features/cart/ui/bloc/cart_bloc.dart';
+import 'package:netgeek/features/cart/ui/pages/cart_page.dart';
 import 'package:netgeek/features/categories/bloc/categories_bloc.dart';
 import 'package:netgeek/features/categories/ui/pages/categories_page.dart';
 
@@ -39,11 +40,9 @@ class _DashboardPageState extends State<DashboardPage> {
         ],
         child: IndexedStack(
           index: _selectedPageIndex,
-          children: [
+          children: const [
             CategoriesPage(),
-            Center(
-              child: Text('Bag'),
-            ),
+            CartPage(),
           ],
         ),
       ),

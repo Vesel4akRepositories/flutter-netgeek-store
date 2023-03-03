@@ -1,21 +1,70 @@
+import 'package:drift/drift.dart';
 import 'package:injectable/injectable.dart';
 import 'package:netgeek/core/storage/database.dart';
-import 'package:netgeek/features/products/models/product.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:netgeek/features/cart/models/product_cart_item.dart';
 
 @injectable
 class CartRepository {
-  late final SharedPreferences _sharedPrefs;
+  final AppDb _appDb;
 
-//  final AppDb appDb;
+  CartRepository(this._appDb);
 
-  CartRepository();
-  Future<List<Product>> fetchCartItems() async {
+  Future<List<ProductCartItem>> fetchCartItems() async {
     try {
-      //final itemsRawString = _sharedPrefs.();
+      final items = await _appDb.cartEntries.select().get();
 
-     // final items = appDb.cart;
-      return [];
+      final products = items
+          .map<ProductCartItem>(
+            (e) => ProductCartItem(
+              id: e.id,
+              name: e.name,
+              picture: e.picture,
+              price: e.price,
+              quantity: e.quantity,
+            ),
+          )
+          .toList();
+
+      return products;
+    } catch (_) {
+      rethrow;
+    }
+  }
+
+  Future<void> addItemToCart(ProductCartItem item) async {
+    try {
+      await _appDb.cartEntries.insertOne(
+        CartEntry.fromJson(item.toJson()),
+        mode: InsertMode.insertOrIgnore,
+      );
+    } catch (_) {
+      rethrow;
+    }
+  }
+
+  Future<void> updateItemQuantity(ProductCartItem item) async {
+    try {
+      return _appDb.cartEntries.replaceOne(
+        CartEntry.fromJson(
+          item.toJson(),
+        ),
+      );
+    } catch (_) {
+      rethrow;
+    }
+  }
+
+  Future<void> removeItem(int itemId) async {
+    try {
+      await _appDb.cartEntries.deleteWhere((tbl) => tbl.id.equals(itemId));
+    } catch (_) {
+      rethrow;
+    }
+  }
+
+  Future<void> removeAll() async {
+    try {
+      await _appDb.cartEntries.deleteAll();
     } catch (_) {
       rethrow;
     }

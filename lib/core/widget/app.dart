@@ -3,13 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:netgeek/core/injection/injection.dart';
 import 'package:netgeek/core/theme/app_theme.dart';
 import 'package:netgeek/core/widget/dialogs/dialogs_manager.dart';
+import 'package:netgeek/features/cart/ui/bloc/cart_bloc.dart';
 import 'package:netgeek/features/dashboard/ui/pages/dashboard_page.dart';
 import 'package:netgeek/features/login/bloc/auth_bloc.dart';
 import 'package:netgeek/features/login/bloc/login_bloc.dart';
 
 import 'package:netgeek/features/login/ui/pages/login_page.dart';
-import 'package:netgeek/features/registration/bloc/registration_bloc.dart';
-import 'package:netgeek/features/registration/ui/pages/registration_page.dart';
 
 class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);
@@ -22,24 +21,31 @@ class App extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) => MaterialApp(
-        theme: appTheme,
-        debugShowCheckedModeBanner: false,
-        home: GestureDetector(
-          onTap: () => _unFocus(context),
-          child: BlocProvider(
+  Widget build(BuildContext context) => MultiBlocProvider(
+        providers: [
+          BlocProvider(
             create: (_) => getIt<AuthBloc>()
               ..add(
                 const AuthEvent.started(),
               ),
+          ),
+          BlocProvider(
+            create: (_) => getIt<CartBloc>()..add(const CartEvent.fetchItems()),
+          ),
+        ],
+        child: MaterialApp(
+          theme: appTheme,
+          debugShowCheckedModeBanner: false,
+          home: GestureDetector(
+            onTap: () => _unFocus(context),
             child: const DialogsManager(
               child: _AppRouter(),
             ),
           ),
-        ),
-        builder: (context, child) => MediaQuery(
-          data: MediaQuery.of(context).copyWith(textScaleFactor: 1),
-          child: child!,
+          builder: (context, child) => MediaQuery(
+            data: MediaQuery.of(context).copyWith(textScaleFactor: 1),
+            child: child!,
+          ),
         ),
       );
 }
