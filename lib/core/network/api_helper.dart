@@ -53,6 +53,7 @@ class HttpManager {
 
     if (accessToken != null) {
       options.headers.clear();
+      print('toekN $accessToken');
       options.headers.addAll({
         "Content-Type": 'application/json',
         "Authorization": 'Bearer $accessToken',

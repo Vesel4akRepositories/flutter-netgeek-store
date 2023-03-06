@@ -19,7 +19,7 @@ class CartItemView extends StatelessWidget {
     required this.onUpdateQuantity,
   }) : super(key: key);
 
-  final _itemHeight = 150.0;
+  final _itemHeight = 130.0;
 
   @override
   Widget build(BuildContext context) {
@@ -61,12 +61,21 @@ class CartItemView extends StatelessWidget {
                     ),
                     const Gap(kPadding),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         _QuantityControlsView(
                           product: product,
                           updateQuantity: onUpdateQuantity,
                           onRemove: onRemoveItem,
                         ),
+                        Expanded(
+                          child: Text(
+                            '${product.price} руб.',
+                            textAlign: TextAlign.end,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        const Gap(11),
                       ],
                     )
                   ],
@@ -163,13 +172,14 @@ class _QuantityIncrementButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 40,
-      height: 40,
+      width: 30,
+      height: 30,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: Theme.of(context).primaryColor,
       ),
       child: IconButton(
+        splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
         icon: Icon(
           iconData,

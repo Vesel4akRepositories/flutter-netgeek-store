@@ -5,6 +5,7 @@ import 'package:netgeek/core/constants/constants.dart';
 
 final appTheme = ThemeData(
   primaryColor: primaryColor,
+  dividerColor: const Color(0xff9B9B9B),
   appBarTheme: _buildAppBarTheme(),
   colorScheme: ColorScheme.fromSwatch().copyWith(
     primary: primaryColor,

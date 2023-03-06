@@ -9,6 +9,7 @@ import 'package:netgeek/features/login/bloc/auth_bloc.dart';
 import 'package:netgeek/features/login/bloc/login_bloc.dart';
 
 import 'package:netgeek/features/login/ui/pages/login_page.dart';
+import 'package:netgeek/features/wishlist/bloc/wishlist_bloc.dart';
 
 class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);
@@ -31,6 +32,9 @@ class App extends StatelessWidget {
           ),
           BlocProvider(
             create: (_) => getIt<CartBloc>()..add(const CartEvent.fetchItems()),
+          ),
+          BlocProvider(
+            create: (_) => getIt<WishlistBloc>()..add(const WishlistEvent.fetchItems()),
           ),
         ],
         child: MaterialApp(

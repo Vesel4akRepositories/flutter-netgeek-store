@@ -13,6 +13,7 @@ class CartEvent with _$CartEvent {
 
   const factory CartEvent.addItem({
     required Product product,
+    required int quantity,
   }) = _AddItemEvent;
 
   const factory CartEvent.removeItem({
@@ -98,7 +99,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
           name: product.name,
           picture: product.image ?? '',
           price: double.parse(product.price),
-          quantity: product.quantity,
+          quantity: event.quantity,
         ),
       );
       add(const CartEvent.fetchItems());
@@ -123,7 +124,6 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     Emitter<CartState> emitter,
   ) async {
     final product = event.product;
-
     await _repository.updateItemQuantity(
       product.copyWith(quantity: event.quantity),
     );

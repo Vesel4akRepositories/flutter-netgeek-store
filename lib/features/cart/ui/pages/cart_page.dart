@@ -15,12 +15,30 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
+  CartBloc get _cartBloc => context.read<CartBloc>();
+
   void _onError(Exception exception) {
     DialogsManager.of(context).showError(exception: exception);
   }
 
+  void _onUpdateProductQuantity(
+    ProductCartItem item,
+    int quantity,
+  ) {
+    _cartBloc.add(
+      CartEvent.changeQuantity(
+        product: item,
+        quantity: quantity,
+      ),
+    );
+  }
+
+  void _onClearCart() => _cartBloc.add(const CartEvent.clear());
+
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
     return BlocConsumer<CartBloc, CartState>(
       listener: (_, state) {
         state.maybeMap(
@@ -37,14 +55,44 @@ class _CartPageState extends State<CartPage> {
               )
             : Padding(
                 padding: const EdgeInsets.symmetric(horizontal: kPadding),
-                child: ListView.separated(
-                  itemCount: cartItems.length,
-                  itemBuilder: (_, index) => CartItemView(
-                    product: cartItems[index],
-                    onRemoveItem: (int) {},
-                    onUpdateQuantity: (ProductCartItem item, int quantity) {},
-                  ),
-                  separatorBuilder: (_, __) => const Gap(kPadding),
+                child: CustomScrollView(
+                  slivers: [
+                    SliverToBoxAdapter(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Gap(kPadding),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Моя корзина',
+                                style: textTheme.headlineSmall,
+                              ),
+                              IconButton(
+                                onPressed: _onClearCart,
+                                icon: const Icon(Icons.remove_circle),
+                              ),
+                            ],
+                          ),
+                          const Gap(kPadding),
+                        ],
+                      ),
+                    ),
+                    SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        childCount: cartItems.length,
+                        (_, index) => Padding(
+                          padding: const EdgeInsets.only(bottom: kPadding),
+                          child: CartItemView(
+                            product: cartItems[index],
+                            onRemoveItem: (int) {},
+                            onUpdateQuantity: _onUpdateProductQuantity,
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
                 ),
               );
       },

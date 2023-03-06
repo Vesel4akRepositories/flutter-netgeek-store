@@ -4,6 +4,7 @@ import 'package:netgeek/core/constants/constants.dart';
 import 'package:netgeek/core/widget/gap/gap.dart';
 import 'package:netgeek/features/cart/ui/bloc/cart_bloc.dart';
 import 'package:netgeek/features/products/models/product.dart';
+import 'package:netgeek/features/products/ui/views/heart_button.dart';
 import 'package:share_plus/share_plus.dart';
 
 class ProductDetailsPage extends StatefulWidget {
@@ -27,11 +28,13 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-    context.read<CartBloc>();
     return Scaffold(
       appBar: AppBar(
         title: Text(product.name),
         actions: [
+          HeartButton(
+            product: product,
+          ),
           IconButton(
             icon: const Icon(Icons.share),
             onPressed: () => _onShare(product),
@@ -74,7 +77,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>
                   ),
                   const Gap(10),
                   Text(
-                    'Совсем немного: ${product.quantity}',
+                    'На складе: ${product.quantity}',
                     style: const TextStyle(
                       color: Colors.grey,
                     ),
@@ -94,7 +97,11 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>
       floatingActionButton: Padding(
         padding: const EdgeInsets.symmetric(horizontal: kPadding),
         child: ElevatedButton(
-          onPressed: () => _addToCart(context, product: product),
+          onPressed: () => _addToCart(
+            context,
+            product: product,
+            quantity: 1,
+          ),
           child: const Text('Add to cart'),
         ),
       ),
@@ -108,6 +115,15 @@ mixin ProductDetailsMixin {
         'Хочу поделиться с тобой одним интересным продуктом, его можно приобрести в магазине netgeek: ${product.toString()}');
   }
 
-  void _addToCart(BuildContext context, {required Product product}) =>
-      context.read<CartBloc>().add(CartEvent.addItem(product: product));
+  void _addToCart(
+    BuildContext context, {
+    required Product product,
+    required int quantity,
+  }) =>
+      context.read<CartBloc>().add(
+            CartEvent.addItem(
+              product: product,
+              quantity: quantity,
+            ),
+          );
 }

@@ -9,16 +9,22 @@ import 'package:path/path.dart' as p;
 
 part 'database.g.dart';
 
-
-@DriftDatabase(
-  tables: [CartEntries]
-)
+@DriftDatabase(tables: [CartEntries, WishlistEntries])
 @singleton
 class AppDb extends _$AppDb {
   AppDb() : super(_openConnection());
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
+
+  @override
+  MigrationStrategy get migration {
+    return MigrationStrategy(
+      onCreate: (Migrator m) async {
+        await m.createAll();
+      },
+    );
+  }
 }
 
 LazyDatabase _openConnection() {
@@ -32,4 +38,3 @@ LazyDatabase _openConnection() {
     return NativeDatabase.createInBackground(file);
   });
 }
-
