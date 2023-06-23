@@ -8,23 +8,26 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart' as _i5;
 import 'package:get_it/get_it.dart' as _i1;
 import 'package:injectable/injectable.dart' as _i2;
-import 'package:netgeek/core/injection/register_module.dart' as _i20;
+import 'package:netgeek/core/injection/register_module.dart' as _i22;
 import 'package:netgeek/core/network/api_helper.dart' as _i10;
 import 'package:netgeek/core/storage/database.dart' as _i3;
 import 'package:netgeek/features/cart/data/cart_repository.dart' as _i4;
 import 'package:netgeek/features/cart/ui/bloc/cart_bloc.dart' as _i9;
-import 'package:netgeek/features/categories/bloc/categories_bloc.dart' as _i19;
+import 'package:netgeek/features/categories/bloc/categories_bloc.dart' as _i20;
 import 'package:netgeek/features/categories/data/categories_repository.dart'
     as _i15;
+import 'package:netgeek/features/checkout/bloc/checkout_bloc.dart' as _i21;
+import 'package:netgeek/features/checkout/data/checkout_repository.dart'
+    as _i16;
 import 'package:netgeek/features/login/bloc/auth_bloc.dart' as _i8;
-import 'package:netgeek/features/login/bloc/login_bloc.dart' as _i16;
+import 'package:netgeek/features/login/bloc/login_bloc.dart' as _i17;
 import 'package:netgeek/features/login/data/login_repository.dart' as _i11;
 import 'package:netgeek/features/login/data/token_repository.dart' as _i6;
-import 'package:netgeek/features/products/bloc/products_bloc.dart' as _i17;
+import 'package:netgeek/features/products/bloc/products_bloc.dart' as _i18;
 import 'package:netgeek/features/products/data/products_repository.dart'
     as _i12;
 import 'package:netgeek/features/registration/bloc/registration_bloc.dart'
-    as _i18;
+    as _i19;
 import 'package:netgeek/features/registration/data/registration_repository.dart'
     as _i13;
 import 'package:netgeek/features/wishlist/bloc/wishlist_bloc.dart' as _i14;
@@ -66,17 +69,21 @@ _i1.GetIt $initGetIt(
       () => _i14.WishlistBloc(get<_i7.WishlistRepository>()));
   gh.factory<_i15.CategoriesRepository>(
       () => _i15.CategoriesRepository(get<_i10.HttpManager>()));
-  gh.factory<_i16.LoginBloc>(() => _i16.LoginBloc(
+  gh.factory<_i16.CheckoutRepository>(
+      () => _i16.CheckoutRepository(get<_i10.HttpManager>()));
+  gh.factory<_i17.LoginBloc>(() => _i17.LoginBloc(
         get<_i8.AuthBloc>(),
         get<_i11.LoginRepository>(),
       ));
-  gh.factory<_i17.ProductsBloc>(
-      () => _i17.ProductsBloc(get<_i12.ProductsRepository>()));
-  gh.factory<_i18.RegistrationBloc>(
-      () => _i18.RegistrationBloc(get<_i13.RegistrationRepository>()));
-  gh.factory<_i19.CategoriesBloc>(
-      () => _i19.CategoriesBloc(get<_i15.CategoriesRepository>()));
+  gh.factory<_i18.ProductsBloc>(
+      () => _i18.ProductsBloc(get<_i12.ProductsRepository>()));
+  gh.factory<_i19.RegistrationBloc>(
+      () => _i19.RegistrationBloc(get<_i13.RegistrationRepository>()));
+  gh.factory<_i20.CategoriesBloc>(
+      () => _i20.CategoriesBloc(get<_i15.CategoriesRepository>()));
+  gh.factory<_i21.CheckoutBloc>(
+      () => _i21.CheckoutBloc(get<_i16.CheckoutRepository>()));
   return get;
 }
 
-class _$RegisterModule extends _i20.RegisterModule {}
+class _$RegisterModule extends _i22.RegisterModule {}

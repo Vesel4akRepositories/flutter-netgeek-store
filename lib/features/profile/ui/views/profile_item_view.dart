@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:netgeek/core/widget/gap/gap.dart';
 import 'package:netgeek/features/profile/models/profile_item.dart';
+import 'package:netgeek/features/profile/ui/pages/contacts_page.dart';
 
 class ProfileItemView extends StatelessWidget {
   final ProfileItem item;
@@ -10,8 +11,23 @@ class ProfileItemView extends StatelessWidget {
     required this.item,
   }) : super(key: key);
 
-  void _openUrl(){
+  void _openUrl(BuildContext context, {required String url}) {
+    if (url.isEmpty) return;
+    Widget? page;
+    switch (url) {
+      case 'cart':
+        page = const ContactsPage();
+        break;
+    }
 
+    if (page == null) return;
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => page!,
+      ),
+    );
   }
 
   @override
@@ -19,7 +35,8 @@ class ProfileItemView extends StatelessWidget {
     final themeData = Theme.of(context);
 
     return GestureDetector(
-      onTap: _openUrl,
+      onTap: () => _openUrl(context, url: item.url),
+      behavior: HitTestBehavior.opaque,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
         child: Row(
@@ -32,7 +49,7 @@ class ProfileItemView extends StatelessWidget {
                   item.title,
                   style: themeData.textTheme.titleMedium,
                 ),
-                Gap(10),
+                const Gap(10),
                 Text(
                   item.description,
                   style: const TextStyle(
@@ -51,3 +68,4 @@ class ProfileItemView extends StatelessWidget {
     );
   }
 }
+

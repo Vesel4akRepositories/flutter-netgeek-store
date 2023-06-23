@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:netgeek/core/constants/constants.dart';
+import 'package:netgeek/core/injection/injection.dart';
+import 'package:netgeek/features/login/bloc/auth_bloc.dart';
 import 'package:netgeek/features/profile/models/profile_item.dart';
 import 'package:netgeek/features/profile/ui/views/profile_header.dart';
 import 'package:netgeek/features/profile/ui/views/profile_item_view.dart';
@@ -29,6 +31,7 @@ class _ProfilePageState extends State<ProfilePage> {
     _profileItems.addAll(jsonMap['items']
         .map<ProfileItem>((e) => ProfileItem.fromJson(e))
         .toList());
+    setState(() {});
   }
 
   @override
@@ -53,8 +56,37 @@ class _ProfilePageState extends State<ProfilePage> {
               },
             ),
           ),
+          const SliverToBoxAdapter(
+            child: Column(
+              children: [
+                Divider(),
+                LogOutButton(),
+              ],
+            ),
+          )
         ],
       ),
+    );
+  }
+}
+
+class LogOutButton extends StatelessWidget {
+  const LogOutButton({Key? key}) : super(key: key);
+
+  void _logOut() => getIt<AuthBloc>().add(const AuthEvent.loggedOut());
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      contentPadding: EdgeInsets.zero,
+      onTap: _logOut,
+      title: const Text(
+        'Выйти',
+        style: TextStyle(
+          fontSize: 16,
+        ),
+      ),
+      trailing: const Icon(Icons.logout),
     );
   }
 }

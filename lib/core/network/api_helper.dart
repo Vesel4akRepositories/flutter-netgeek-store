@@ -18,6 +18,7 @@ class HttpManager {
     ..options.receiveTimeout = 20000
     ..options.headers = {
       "Content-Type": 'application/json',
+      "Accept": 'application/json',
     };
 
   final TokenRepository _tokenRepository;

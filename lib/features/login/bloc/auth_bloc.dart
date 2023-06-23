@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
@@ -63,6 +65,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   Future<void> _loggedIn(
       _AuthLoginEvent event, Emitter<AuthState> emitter) async {
     try {
+      emitter(AuthState.uninitialized());
+
       final accessToken = event.accessToken;
       final refreshToken = event.refreshToken;
 
